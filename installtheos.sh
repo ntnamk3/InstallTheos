@@ -68,7 +68,7 @@ echo $TMP
 tar --lzma -xf linux-ios-arm64e-clang-toolchain.tar.lzma -C $TMP
 sudo mkdir -p $THEOS/toolchain/linux/iphone
 sudo mv $TMP/ios-arm64e-clang-toolchain/* $THEOS/toolchain/linux/iphone/
-rm -rf $TMP
+sudo rm -rf $TMP
 cd $HOME
 wget https://github.com/xybp888/iOS-SDKs/archive/master.zip
 unzip master.zip
@@ -79,5 +79,5 @@ rm -rf $HOME/iOS-SDKs-master
 rm -rf $HOME/master.zip
 curl https://kabiroberai.com/toolchain/download.php?toolchain=swift-ubuntu-latest -Lo swift-toolchain.tar.gz
 sudo tar xzf swift-toolchain.tar.gz -C $THEOS/toolchain
-rm swift-toolchain.tar.gz
+sudo rm swift-toolchain.tar.gz
 echo "All done!"
