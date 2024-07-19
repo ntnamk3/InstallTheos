@@ -10,7 +10,7 @@ set -eux
 sudo rm -rf $THEOS
 
 # read optional command line argument
-LLVM_VERSION=12
+LLVM_VERSION=11
 if [ "$#" -eq 1 ]; then
     LLVM_VERSION=$1
 fi
