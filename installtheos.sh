@@ -59,7 +59,7 @@ wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 add-apt-repository "${REPO_NAME}"
 apt-get update
 apt-get install -y clang-$LLVM_VERSION lldb-$LLVM_VERSION lld-$LLVM_VERSION clangd-$LLVM_VERSION
-sudo apt-get install fakeroot git perl clang-14.0 build-essential
+sudo apt-get install fakeroot git perl clang-14.0.0 build-essential
 sudo git clone --recursive https://github.com/theos/theos.git $THEOS
 sudo rm -rf $THEOS/toolchain
 curl -LO https://github.com/sbingner/llvm-project/releases/download/v10.0.0-2/linux-ios-arm64e-clang-toolchain.tar.lzma
