@@ -7,6 +7,8 @@ source ~/.profile
 sudo apt-get install software-properties-common gnupg1 gnupg2 gnupg3 gnupg unzip
 set -eux
 
+sudo rm -rf $THEOS
+
 # read optional command line argument
 LLVM_VERSION=10
 if [ "$#" -eq 1 ]; then
@@ -59,8 +61,8 @@ apt-get update
 apt-get install -y clang-$LLVM_VERSION lldb-$LLVM_VERSION lld-$LLVM_VERSION clangd-$LLVM_VERSION
 sudo apt-get install fakeroot git perl clang-6.0 build-essential
 sudo git clone --recursive https://github.com/theos/theos.git $THEOS
-sudo rm -rf $THEOS/toolchain*
-curl -LO https://github.com/sbingner/llvm-project/releases/download/v10.0.0-1/linux-ios-arm64e-clang-toolchain.tar.lzma
+sudo rm -rf $THEOS/toolchain
+curl -LO https://github.com/sbingner/llvm-project/releases/download/v10.0.0-2/linux-ios-arm64e-clang-toolchain.tar.lzma
 TMP=$(mktemp -d)
 echo $TMP
 tar --lzma -xf linux-ios-arm64e-clang-toolchain.tar.lzma -C $TMP
