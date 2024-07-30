@@ -1,12 +1,5 @@
 #!/bin/bash
 
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root!"
-   exit 1
-fi
-
-set -euo pipefail
-
 echo 'export THEOS=/opt/theos' >> ~/.profile
 echo 'if [[ "$(umask)" = "0000" ]]; then' >> ~/.profile
 echo '  umask 0022' >> ~/.profile
