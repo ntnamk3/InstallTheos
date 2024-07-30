@@ -1,15 +1,19 @@
 #!/bin/bash
 
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root!"
+   exit 1
+fi
+
+set -euo pipefail
+
 echo 'export THEOS=/opt/theos' >> ~/.profile
 echo 'if [[ "$(umask)" = "0000" ]]; then' >> ~/.profile
 echo '  umask 0022' >> ~/.profile
 echo 'fi' >> ~/.profile
 source ~/.profile
 
-sudo apt-get update
-sudo apt-get install software-properties-common gnupg1 gnupg2 gnupg3 gnupg unzip
-
-set -euo
+sudo apt-get install -y software-properties-common gnupg1 gnupg2 gnupg3 gnupg unzip
 
 sudo rm -rf $THEOS
 
@@ -49,9 +53,9 @@ case "$DIST_VERSION" in
 esac
 
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-add-apt-repository "${REPO_NAME}"
-apt-get update
-apt-get install -y clang-$LLVM_VERSION lldb-$LLVM_VERSION lld-$LLVM_VERSION clangd-$LLVM_VERSION
+sudo add-apt-repository "${REPO_NAME}"
+sudo apt-get update
+sudo apt-get install -y clang-$LLVM_VERSION lldb-$LLVM_VERSION lld-$LLVM_VERSION clangd-$LLVM_VERSION
 sudo apt-get install -y fakeroot git perl clang-6.0 build-essential
 
 sudo git clone --recursive https://github.com/theos/theos.git $THEOS
