@@ -1,26 +1,28 @@
 #!/bin/bash
-echo export THEOS=/opt/theos >> ~/.profile
-echo “if [[ "$(umask)" = "0000" ]]; then” >> ~/.profile
-echo “  umask 0022” >> ~/.profile
-echo “fi” >> ~/.profile
-source ~/.profile
-sudo apt-get install software-properties-common gnupg1 gnupg2 gnupg3 gnupg unzip
-set -eux
-sudo rm -rf $THEOS
-# read optional command line argument
-LLVM_VERSION=10
-if [ "$#" -eq 1 ]; then
-    LLVM_VERSION=$1
-fi
-
-DISTRO=$(lsb_release -is)
-VERSION=$(lsb_release -sr)
-DIST_VERSION="${DISTRO}_${VERSION}"
 
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root!"
    exit 1
 fi
+
+set -euo pipefail
+
+echo 'export THEOS=/opt/theos' >> ~/.profile
+echo 'if [[ "$(umask)" = "0000" ]]; then' >> ~/.profile
+echo '  umask 0022' >> ~/.profile
+echo 'fi' >> ~/.profile
+source ~/.profile
+
+sudo apt-get update
+sudo apt-get install -y software-properties-common gnupg1 gnupg2 gnupg3 gnupg unzip
+
+sudo rm -rf $THEOS
+
+LLVM_VERSION=${1:-10}
+
+DISTRO=$(lsb_release -is)
+VERSION=$(lsb_release -sr)
+DIST_VERSION="${DISTRO}_${VERSION}"
 
 declare -A LLVM_VERSION_PATTERNS
 LLVM_VERSION_PATTERNS[9]="-9"
@@ -51,30 +53,32 @@ case "$DIST_VERSION" in
         exit 2
 esac
 
+wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+sudo add-apt-repository "${REPO_NAME}"
+sudo apt-get update
+sudo apt-get install -y clang-$LLVM_VERSION lldb-$LLVM_VERSION lld-$LLVM_VERSION clangd-$LLVM_VERSION
+sudo apt-get install -y fakeroot git perl clang-6.0 build-essential
 
-# install everything
-wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-add-apt-repository "${REPO_NAME}"
-apt-get update
-apt-get install -y clang-$LLVM_VERSION lldb-$LLVM_VERSION lld-$LLVM_VERSION clangd-$LLVM_VERSION
-sudo apt-get install fakeroot git perl clang-6.0 build-essential
 sudo git clone --recursive https://github.com/theos/theos.git $THEOS
 sudo rm -rf $THEOS/toolchain*
+
 curl -LO https://github.com/sbingner/llvm-project/releases/download/v10.0.0-1/linux-ios-arm64e-clang-toolchain.tar.lzma
 TMP=$(mktemp -d)
 echo $TMP
 tar --lzma -xf linux-ios-arm64e-clang-toolchain.tar.lzma -C $TMP
 sudo mkdir -p $THEOS/toolchain/linux/iphone
 sudo mv $TMP/ios-arm64e-clang-toolchain/* $THEOS/toolchain/linux/iphone/
-#rm -rf $TMP
+rm -rf $TMP linux-ios-arm64e-clang-toolchain.tar.lzma
+
 cd $HOME
 wget https://github.com/xybp888/iOS-SDKs/archive/master.zip
 unzip master.zip
-sudo mkdir $THEOS/sdks
+sudo mkdir -p $THEOS/sdks
 sudo mv $HOME/iOS-SDKs-master/*.sdk $THEOS/sdks
-#rm -rf $HOME/iOS-SDKs-master
-#rm -rf $HOME/master.zip
+rm -rf $HOME/iOS-SDKs-master $HOME/master.zip
+
 curl https://kabiroberai.com/toolchain/download.php?toolchain=swift-ubuntu-latest -Lo swift-toolchain.tar.gz
 sudo tar xzf swift-toolchain.tar.gz -C $THEOS/toolchain
-#rm swift-toolchain.tar.gz
+rm swift-toolchain.tar.gz
+
 echo "All done!"
