@@ -54,9 +54,9 @@ case "$DIST_VERSION" in
 esac
 
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-sudo add-apt-repository "${REPO_NAME}"
-sudo apt-get update
-sudo apt-get install -y clang-$LLVM_VERSION lldb-$LLVM_VERSION lld-$LLVM_VERSION clangd-$LLVM_VERSION
+add-apt-repository "${REPO_NAME}"
+apt-get update
+apt-get install -y clang-$LLVM_VERSION lldb-$LLVM_VERSION lld-$LLVM_VERSION clangd-$LLVM_VERSION
 sudo apt-get install -y fakeroot git perl clang-6.0 build-essential
 
 sudo git clone --recursive https://github.com/theos/theos.git $THEOS
