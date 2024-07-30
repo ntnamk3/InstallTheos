@@ -25,7 +25,7 @@ fi
 # Source the profile to apply changes
 source ~/.profile
 
-sudo apt-get update
+#sudo apt-get update
 #sudo apt-get install -y software-properties-common gnupg1 gnupg2 gnupg3 gnupg unzip
 
 sudo rm -rf $THEOS
