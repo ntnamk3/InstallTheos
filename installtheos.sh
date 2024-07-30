@@ -13,7 +13,7 @@ echo '  umask 0022' >> ~/.profile
 echo 'fi' >> ~/.profile
 source ~/.profile
 
-sudo apt-get install -y software-properties-common gnupg1 gnupg2 gnupg3 gnupg unzip
+#sudo apt-get install -y software-properties-common gnupg1 gnupg2 gnupg3 gnupg unzip
 
 sudo rm -rf $THEOS
 
