@@ -16,6 +16,8 @@ source ~/.profile
 sudo apt-get update
 sudo apt-get install software-properties-common gnupg1 gnupg2 gnupg3 gnupg unzip
 
+set -euo
+
 sudo rm -rf $THEOS
 
 LLVM_VERSION=${1:-10}
