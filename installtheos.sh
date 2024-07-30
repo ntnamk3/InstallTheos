@@ -6,7 +6,7 @@ echo “fi” >> ~/.profile
 source ~/.profile
 sudo apt-get install software-properties-common gnupg1 gnupg2 gnupg3 gnupg unzip
 set -eux
-rm -rf $THEOS
+sudo rm -rf $THEOS
 # read optional command line argument
 LLVM_VERSION=10
 if [ "$#" -eq 1 ]; then
