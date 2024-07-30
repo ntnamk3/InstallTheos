@@ -5,7 +5,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-
+set -euo pipefail
 
 echo 'export THEOS=/opt/theos' >> ~/.profile
 echo 'if [[ "$(umask)" = "0000" ]]; then' >> ~/.profile
@@ -14,8 +14,8 @@ echo 'fi' >> ~/.profile
 source ~/.profile
 
 sudo apt-get update
-sudo apt-get install -y software-properties-common gnupg1 gnupg2 gnupg3 gnupg unzip
-set -euo pipefail
+sudo apt-get install software-properties-common gnupg1 gnupg2 gnupg3 gnupg unzip
+
 sudo rm -rf $THEOS
 
 LLVM_VERSION=${1:-10}
